@@ -1,0 +1,85 @@
+name: SwornGuard
+main: com.minesworn.SwornGuard
+version: 1.0
+author: [t7seven7t, orange451]
+depend: [SwornNations, SwornJail]
+description: >
+             Comprehensive anti cheat plugin based around catching cheaters rather than preventing their actions.
+commands:
+    swornguard:
+        description: Root command.
+        aliases: [p, sg]
+permissions:
+    swornguard.admin:
+        description: Gives access to all SwornGuard features.
+        children:
+            swornguard.moderator: true
+            swornguard.canban: true
+            swornguard.canfly: true
+            swornguard.canspam: true
+            swornguard.canuseblockedcommands: true
+            swornguard.cancheckips: true
+            swornguard.modbot: true
+            swornguard.legit: true
+    swornguard.moderator:
+        description: Gives access to features intended for moderators.
+        children:
+            swornguard.default: true
+            swornguard.info.seeothers: true
+            swornguard.cankick: true
+            swornguard.canseecheatreports: true
+            swornguard.baninfo: true
+            swornguard.show: true
+            swornguard.note: true
+            swornguard.ratio: true
+    swornguard.info:
+        description: Access to the statistics/info command.
+        default: true
+    swornguard.info.seeothers:
+        description: Can view other player's info.
+        default: false
+    swornguard.canban:
+        description: Give this permission if the player can use /ban.
+        default: false
+    swornguard.cankick:
+        description: Give this permission if the player can use /kick.
+        default: false
+    swornguard.canfly:
+        description: Give this permission to allow them to fly undetected (Not necessary if the player is in creative mode fly).
+        default: false
+    swornguard.canspam:
+        description: Give this permission to allow a player to spam.
+        default: false
+    swornguard.canuseblockedcommands:
+        description: Give this permission to allow players to use blocked commands.
+        default: false
+    swornguard.cankick:
+        description: Give this permission if the player can use /kick.
+        default: false
+    swornguard.canseecheatreports:
+        description: Give this permission to allow players to see cheat reports.
+        default: false
+    swornguard.cancheckips:
+        description: Give this permission to allow the player to see ip addresses.
+        default: false
+    swornguard.baninfo:
+        description: Access to the baninfo command.
+        default: false
+    swornguard.show:
+        description: Access to the profiling command.
+        default: false
+    swornguard.help:
+        description: Access to the help command.
+        default: true
+    swornguard.note:
+        description: Access to the note command.
+        default: false
+    swornguard.modbot:
+        description: Access to the modbot command to enable/disable the automatic bot.
+        default: false
+    swornguard.ratio:
+        description: Access to the ratio command.
+        default: false
+    swornguard.legit:
+        description: Access to the legit command.
+        default: false
