@@ -1,14 +1,14 @@
 name: SwornGuard
-main: com.minesworn.SwornGuard
+main: com.minesworn.swornguard.SwornGuard
 version: 1.0
 author: [t7seven7t, orange451]
-depend: [SwornNations, SwornJail]
+softdepend: [SwornNations, SwornJail, Factions]
 description: >
              Comprehensive anti cheat plugin based around catching cheaters rather than preventing their actions.
 commands:
-    swornguard:
+    sg:
         description: Root command.
-        aliases: [p, sg]
+        aliases: [p, swornguard]
 permissions:
     swornguard.admin:
         description: Gives access to all SwornGuard features.
@@ -68,9 +68,6 @@ permissions:
     swornguard.show:
         description: Access to the profiling command.
         default: false
-    swornguard.help:
-        description: Access to the help command.
-        default: true
     swornguard.note:
         description: Access to the note command.
         default: false
@@ -82,4 +79,7 @@ permissions:
         default: false
     swornguard.legit:
         description: Access to the legit command.
+        default: false
+    swornguard.reload:
+        description: use for debugging only
         default: false
