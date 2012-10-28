@@ -21,7 +21,14 @@ public class PermissionsManager extends PermissionBase {
 		RATIO("ratio"), 
 		LEGIT("legit"), 
 		SINFO("sinfo"),
-		RELOAD("reload");
+		RELOAD("reload"),
+		PATROL("patrol"),
+		AUTOPATROL("autopatrol"),
+		VANISH("vanish"),
+		VANISHLIST("vanishlist"),
+		NOT_PATROLLED("notpatrolled"),
+		CAN_SEE_VANISHED("canseevanished"), 
+		RESPOND_CHEAT_DETECTOR("ctp");
 		
 		public final String node;
 		Permission(final String node) {

@@ -10,5 +10,8 @@ public class Lang extends SLang {
 		errorMessages.add("playernotfound: That player was not found in the database.");
 		errorMessages.add("incorrectpagesyntax: Incorrect page number format.");
 		errorMessages.add("nosuchpage: There is no page with that index.");
+		errorMessages.add("alreadyinspecting: You can't patrol while already inspecting on cheaters.");
+		errorMessages.add("alreadypatrolling: You can't use this command while patrolling.");
+		errorMessages.add("incorrectinterval: You entered the interval wrongly.");
 	}	
 }

@@ -3,6 +3,8 @@ package com.minesworn.swornguard;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Location;
+
 import com.minesworn.swornguard.core.io.Entity;
 
 public class PlayerInfo extends Entity {
@@ -32,6 +34,13 @@ public class PlayerInfo extends Entity {
 	
 	transient long lastUpdatedTimeSpent;
 	transient long lastFlyTick;
+	
+	transient boolean autoPatrolling = false;
+	transient boolean cheaterInspecting = false;
+	transient long stoppedAutoPatrolling;
+	transient Location locationBeforePatrolling;
+	
+	transient boolean vanished = false;
 	
 	int animalKills;
 	int mobKills;
@@ -343,6 +352,36 @@ public class PlayerInfo extends Entity {
 	}
 	public void setDeaths(int deaths) {
 		this.deaths = deaths;
+	}
+	public boolean isAutoPatrolling() {
+		return autoPatrolling;
+	}
+	public void setAutoPatrolling(boolean autoPatrolling) {
+		this.autoPatrolling = autoPatrolling;
+	}
+	public boolean isVanished() {
+		return vanished;
+	}
+	public void setVanished(boolean vanished) {
+		this.vanished = vanished;
+	}
+	public long getStoppedAutoPatrolling() {
+		return stoppedAutoPatrolling;
+	}
+	public void setStoppedAutoPatrolling(long stoppedAutoPatrolling) {
+		this.stoppedAutoPatrolling = stoppedAutoPatrolling;
+	}
+	public Location getLocationBeforePatrolling() {
+		return locationBeforePatrolling;
+	}
+	public void setLocationBeforePatrolling(Location locationBeforePatrolling) {
+		this.locationBeforePatrolling = locationBeforePatrolling;
+	}
+	public boolean isCheaterInspecting() {
+		return cheaterInspecting;
+	}
+	public void setCheaterInspecting(boolean cheaterInspecting) {
+		this.cheaterInspecting = cheaterInspecting;
 	}
 	
 }

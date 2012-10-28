@@ -16,6 +16,8 @@ public class Config {
 	public static boolean enableCombatLogDetector = true;
 	public static boolean enableAutoModeratorBot = true;
 	
+	public static boolean vanishedPlayersAreVisibleToAdmins = true;
+	
 	public static double stoneToIronRatioBeforeWarning = 45.0D;
 	public static double stoneToDiamondRatioBeforeWarning = 9.0D;
 	

@@ -18,6 +18,7 @@ public class SGCommandRoot extends SCommandRoot<SwornGuard> {
 	public static CmdReload CMD_RELOAD = new CmdReload();
 	
 	public SGCommandRoot() {
+		super();
 		addCommand(CMD_BANINFO);
 		addCommand(CMD_INFO);
 		addCommand(CMD_IP);

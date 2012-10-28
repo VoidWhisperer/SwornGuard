@@ -2,10 +2,14 @@ package com.minesworn.swornguard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.minesworn.swornguard.PermissionsManager.Permission;
 import com.minesworn.swornguard.commands.SGCommandRoot;
 import com.minesworn.swornguard.core.SPlugin;
+import com.minesworn.swornguard.core.commands.SCommand;
+import com.minesworn.swornguard.core.commands.SCommandRoot;
 import com.minesworn.swornguard.core.util.Util;
 import com.minesworn.swornguard.detectors.FlyDetector;
 import com.minesworn.swornguard.events.CheatEvent;
@@ -16,12 +20,15 @@ import com.minesworn.swornguard.listeners.EntityListener;
 import com.minesworn.swornguard.listeners.JailListener;
 import com.minesworn.swornguard.listeners.NationsListener;
 import com.minesworn.swornguard.listeners.PlayerJoinQuitListener;
+import com.minesworn.swornguard.patrol.Patrol;
+import com.minesworn.swornguard.patrol.commands.SPCommandRoot;
 import com.minesworn.swornguard.threads.SaveRunnable;
 
 public class SwornGuard extends SPlugin {
 	public static PlayerDatabase playerdatabase;
 	public static ServerInfo serverInfo;
 	public static boolean autoModBotEnabled = false;
+	public static SCommandRoot<?> spCommandRoot;
 	
 	@Override
 	public void onEnable() {
@@ -32,6 +39,7 @@ public class SwornGuard extends SPlugin {
 		playerdatabase = new PlayerDatabase();
 		serverInfo = new ServerInfo();
 		commandRoot = new SGCommandRoot();
+		spCommandRoot = new SPCommandRoot();
 		
 		new SaveRunnable();
 		
@@ -46,6 +54,19 @@ public class SwornGuard extends SPlugin {
 	public void onDisable() {
 		preDisable();
 		playerdatabase.save();
+	}
+	
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String[] args) {
+		if (!super.onCommand(sender, cmd, lbl, args, false)) {
+			for (SCommand<?> command : spCommandRoot.commands) {	
+				if (cmd.getName().equalsIgnoreCase(command.getName()) || command.getAliases().contains(cmd.getName().toLowerCase())) {							
+					command.execute(sender, args);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	@Override
@@ -81,6 +102,14 @@ public class SwornGuard extends SPlugin {
 		if (e.getType() != Cheat.XRAY || (System.currentTimeMillis() - i.getLastWarnedForXray() > 432000000L)) {
 			i.getProfilerList().add("[" + Util.getLongDateCurr() + " GMT] " + ChatColor.RED + "pinged the cheat detector for: " + ChatColor.GOLD + e.getType().toString());
 		} 
+		
+		if (e.getType().equals(Cheat.FLYING) || e.getType().equals(Cheat.XRAY)) {
+			Patrol.addCheater(e.getPlayer());
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (player.hasPermission(Permission.RESPOND_CHEAT_DETECTOR.node))
+					player.sendMessage(ChatColor.RED + "To respond to this cheat alert use /ctp " + e.getPlayer().getName());
+			}
+		}
 		
 		log("Cheatevent player: " + e.getPlayer().getName());
 		log("Cheatevent type: " + e.getType().toString());

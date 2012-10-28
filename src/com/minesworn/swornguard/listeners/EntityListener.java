@@ -6,7 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import com.minesworn.swornguard.Config;
 import com.minesworn.swornguard.PlayerInfo;
@@ -25,6 +28,13 @@ public class EntityListener implements Listener {
 				
 		if (e.getDamager() instanceof Player) {
 			Player damager = (Player) e.getDamager();
+			PlayerInfo i = SwornGuard.playerdatabase.getPlayer(damager.getName());
+			
+			if (i.isAutoPatrolling() || i.isCheaterInspecting()) {
+				e.setCancelled(true);
+				return;
+			}
+			
 			AutoAttack.check(damager, e.getEntity());
 			if (Config.enableAutoClickerProtection)
 				if (AutoClicker.check(damager)) {
@@ -38,7 +48,6 @@ public class EntityListener implements Listener {
 					FactionBetrayalDetector.checkFactionBetrayal(player, e.getDamage(), damager);
 				
 				if (player.getHealth() - e.getDamage() < 0) {
-					PlayerInfo i = SwornGuard.playerdatabase.getPlayer(damager.getName());
 					if (System.currentTimeMillis() - i.getLastPlayerKill() > 300L) {
 						i.setLastPlayerKill(System.currentTimeMillis());
 						i.setPlayerKills(i.getPlayerKills() + 1);
@@ -48,7 +57,6 @@ public class EntityListener implements Listener {
 			} else if (e.getEntity() instanceof Monster) {
 				Monster mob = (Monster) e.getEntity();
 				if (mob.getHealth() - e.getDamage() < 0) {
-					PlayerInfo i = SwornGuard.playerdatabase.getPlayer(damager.getName());
 					if (System.currentTimeMillis() - i.getLastMobKill() > 300L) {
 						i.setLastMobKill(System.currentTimeMillis());
 						i.setMobKills(i.getMobKills() + 1);
@@ -57,7 +65,6 @@ public class EntityListener implements Listener {
 			} else if (e.getEntity() instanceof Animals) {
 				Animals mob = (Animals) e.getEntity();
 				if (mob.getHealth() - e.getDamage() < 0) {
-					PlayerInfo i = SwornGuard.playerdatabase.getPlayer(damager.getName());
 					if (System.currentTimeMillis() - i.getLastAnimalKill() > 300L) {
 						i.setLastAnimalKill(System.currentTimeMillis());
 						i.setAnimalKills(i.getAnimalKills() + 1);
@@ -73,11 +80,35 @@ public class EntityListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onPlayerDamageEvent(EntityDamageEvent e) {
+		if (e.getEntity() instanceof Player) {
+			PlayerInfo i = SwornGuard.playerdatabase.getPlayer(Player.class.cast(e.getEntity()).getName());
+			if (i.isAutoPatrolling() || i.isCheaterInspecting())
+				e.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
 		PlayerInfo i = SwornGuard.playerdatabase.getPlayer(e.getEntity().getName());
 		i.setLastAttacked(0);
 		
 		i.setDeaths(i.getDeaths() + 1);
+	}
+	
+	@EventHandler
+	public void onPlayerPickupItem(PlayerPickupItemEvent e) {
+		if (SwornGuard.playerdatabase.getPlayer(e.getPlayer().getName()).isVanished())
+			e.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
+		PlayerInfo i = SwornGuard.playerdatabase.getPlayer(e.getPlayer().getName());
+		if (i.isAutoPatrolling() || i.isCheaterInspecting()) {
+			e.getPlayer().setAllowFlight(true);
+			e.getPlayer().setFlying(true);
+		}
 	}
 	
 }

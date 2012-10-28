@@ -9,6 +9,33 @@ commands:
     sg:
         description: Root command.
         aliases: [p, swornguard]
+    patrol:
+        description: Teleports the user to the next patrollable player.
+        permission: swornguard.patrol
+        usage: |
+               /<command>
+        aliases: [pat]
+    autopatrol:
+        description: Automatically teleports the user to the next patrollable player after given duration.
+        permission: swornguard.autopatrol
+        usage: |
+               /<command>
+               /<command> <time>
+        aliases: [apat]
+    vanish:
+        description: Vanishes/Unvanishes the user.
+        permission: swornguard.vanish
+        usage: /<command>
+               /<command> <on/off>
+        aliases: [unvanish, hide, unhide]
+    vanishlist:
+        description: Displays a list of vanished users.
+        permission: swornguard.vanishlist
+        usage: /<command>
+    ctp:
+        description: Use to teleport to cheaters.
+        permission: swornguard.ctp
+        usage: /<command>
 permissions:
     swornguard.admin:
         description: Gives access to all SwornGuard features.
@@ -21,6 +48,9 @@ permissions:
             swornguard.cancheckips: true
             swornguard.modbot: true
             swornguard.legit: true
+            swornguard.vanish: true
+            swornguard.vanishlist: true
+            swornguard.patrol: true
     swornguard.moderator:
         description: Gives access to features intended for moderators.
         children:
@@ -32,6 +62,8 @@ permissions:
             swornguard.show: true
             swornguard.note: true
             swornguard.ratio: true
+            swornguard.ctp: true
+            swornguard.autopatrol: true
     swornguard.info:
         description: Access to the statistics/info command.
         default: true
@@ -82,4 +114,19 @@ permissions:
         default: false
     swornguard.reload:
         description: use for debugging only
+        default: false
+    swornguard.ctp:
+        description: Access to ctp command.
+        default: false
+    swornguard.autopatrol:
+        description: Access to autopatrol command.
+        default: false
+    swornguard.vanish:
+        description: Access to vanish command.
+        default: false
+    swornguard.vanishlist:
+        description: Access to vanishlist command.
+        default: false
+    swornguard.patrol:
+        description: Access to patrol command.
         default: false

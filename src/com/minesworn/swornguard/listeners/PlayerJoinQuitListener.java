@@ -1,5 +1,6 @@
 package com.minesworn.swornguard.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +11,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import com.minesworn.swornguard.Config;
 import com.minesworn.swornguard.PlayerInfo;
 import com.minesworn.swornguard.SwornGuard;
+import com.minesworn.swornguard.PermissionsManager.Permission;
 import com.minesworn.swornguard.detectors.CombatLogDetector;
+import com.minesworn.swornguard.patrol.Patrol;
 
 public class PlayerJoinQuitListener implements Listener {
 	
@@ -29,6 +32,12 @@ public class PlayerJoinQuitListener implements Listener {
 			i.getIpAddressList().add(ip);
 		i.setLastOnlineTime(now);
 		i.setOnlineNow(true);
+		
+		// Hide vanished players from newly joined players.
+		if (!e.getPlayer().hasPermission(Permission.CAN_SEE_VANISHED.node))
+			for (Player p : Bukkit.getOnlinePlayers())
+				if (SwornGuard.playerdatabase.getPlayer(p.getName()).isVanished())
+					e.getPlayer().hidePlayer(p);
 	}
 	
 	@EventHandler
@@ -49,6 +58,11 @@ public class PlayerJoinQuitListener implements Listener {
 		i.updateSpentTime();
 		i.setLastOnlineTime(now);
 		i.setOnlineNow(false);
+		
+		if (i.isAutoPatrolling())
+			Patrol.unAutoPatrolNoCooldown(p);
+		if (i.isVanished())
+			Patrol.vanish(p, false);
 	}
 	
 }

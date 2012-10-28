@@ -47,7 +47,7 @@ public abstract class SPlugin extends JavaPlugin implements ISPlugin {
 				}
 			}
 		
-		if (this.getDescription().getCommands().size() == 1)
+		if (this.getDescription().getCommands().size() >= 1)
 			for (Entry<String, Map<String, Object>> entry : this.getDescription().getCommands().entrySet())
 				COMMAND_PREFIXES.add(entry.getKey());
 		
@@ -84,6 +84,10 @@ public abstract class SPlugin extends JavaPlugin implements ISPlugin {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String[] args) {		
+		return onCommand(sender, cmd, lbl, args, true);
+	}
+	
+	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String[] args, boolean helpIfNone) {
 		String cmdlbl = "";
 		ArrayList<String> argList = new ArrayList<String>();
 		if (getCommandPrefix() == null) {
@@ -107,8 +111,11 @@ public abstract class SPlugin extends JavaPlugin implements ISPlugin {
 			}
 		}
 		
-		new CmdHelp().execute(sender, args);
-		return true;
+		if (helpIfNone) {
+			new CmdHelp().execute(sender, args);
+			return true;
+		}
+		return false;
 	}
 	
 	public static String getCommandPrefix() {return (!COMMAND_PREFIXES.isEmpty()) ? COMMAND_PREFIXES.get(0) : null;}	
