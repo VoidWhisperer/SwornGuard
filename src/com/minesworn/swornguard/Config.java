@@ -15,7 +15,7 @@ public class Config {
 	public static boolean enableAutoClickerProtection = true;
 	public static boolean enableCombatLogDetector = true;
 	public static boolean enableAutoModeratorBot = true;
-	
+	public static boolean jailAmountNoticeEnabled = true;
 	public static boolean vanishedPlayersAreVisibleToAdmins = true;
 	
 	public static double stoneToIronRatioBeforeWarning = 45.0D;
@@ -24,7 +24,8 @@ public class Config {
 	public static long timeBetweenAttacksInMilliseconds = 500;
 	
 	public static int maxNumberOfEntitiesAllowedToDamagePerSecondBeforeWarning = 4;
-	
+	public static int jailsBeforeNotice = 2;
+
 	public static boolean mobHitsCauseCombatLog = false;
 	public static boolean playerHitsCauseCombatLog = true;
 	public static double combatLogWindowLastsForXSecondsAfterLastAttack = 3.0D;
