@@ -88,17 +88,21 @@ public class SwornGuard extends SPlugin {
 	}
 	
 	public static void announceCheat(CheatEvent e) {
+		PlayerInfo i = playerdatabase.getPlayer(e.getPlayer().getName());
 		Bukkit.getPluginManager().callEvent(e);
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (PermissionsManager.hasPermission(p, Permission.CAN_SEE_CHEAT_REPORTS.node)) {
 				p.sendMessage(ChatColor.RED + e.getMessage());
+				if(i.getJailCount() >= Config.jailsBeforeNotice && Config.jailAmountNoticeEnabled)
+				{
+					p.sendMessage(ChatColor.RED + "Player " + p.getName() + " has multiple offences they have been jailed for. Please investigate this notice.");
+				}
 			}
 		}
 		
 		if ((AutoModerator.isOnlyModeratorOnline() || autoModBotEnabled) && Config.enableAutoModeratorBot)
 			AutoModerator.manageCheatEvent(e);
 		
-		PlayerInfo i = playerdatabase.getPlayer(e.getPlayer().getName());
 		if (e.getType() != Cheat.XRAY || (System.currentTimeMillis() - i.getLastWarnedForXray() > 432000000L)) {
 			i.getProfilerList().add("[" + Util.getLongDateCurr() + " GMT] " + ChatColor.RED + "pinged the cheat detector for: " + ChatColor.GOLD + e.getType().toString());
 		} 
